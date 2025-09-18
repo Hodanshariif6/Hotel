@@ -6,7 +6,7 @@ function News() {
   const [data, setData] = useState([]);
 
   const handleReadData = () => {
-    axios.post("https://hotel-u7t5.onrender.com/read/New").then((res) => {
+    axios.post("https://hotel-1-kdj9.onrender.com/read/New").then((res) => {
       setData(res.data);
     });
   };
@@ -16,7 +16,7 @@ function News() {
   }, []);
 
   const handleDelete = (id) => {
-    axios.delete(`https://booking-backend-dgth.onrender.com/delete/New/${id}`).then(() => {
+    axios.delete(`https://hotel-1-kdj9.onrender.com/delete/New/${id}`).then(() => {
       alert("Success delete");
       handleReadData();
     });
@@ -46,7 +46,7 @@ function News() {
                 <td className="py-3 px-4">{index + 1}</td>
                 <td className="py-3 px-4">
                   <img
-                    src={`https://booking-backend-dgth.onrender.com/allImages/${items.prImage}`}
+                    src={`https://hotel-1-kdj9.onrender.com/allImages/${items.prImage}`}
                     alt={items.name}
                     className="w-12 h-12 object-cover rounded-md"
                   />

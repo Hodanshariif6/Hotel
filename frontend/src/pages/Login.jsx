@@ -15,8 +15,8 @@ function Login() {
 
     const url =
       active === "customer"
-        ? "https://hotel-u7t5.onrender.com/login/customer"
-        : "https://hotel-u7t5.onrender.com/login/admin";
+        ? "https://hotel-1-kdj9.onrender.com/login/customer"
+        : "https://hotel-1-kdj9.onrender.com/login/admin";
 
     const payload = { email, password };
     console.log("➡️ Sending to:", url, "Payload:", payload);

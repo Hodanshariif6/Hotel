@@ -18,8 +18,8 @@ function Register() {
 
     const url =
       active === "customer"
-        ? "https://hotel-u7t5.onrender.com/create/customer"
-        : "https://hotel-u7t5.onrender.com/create/admin";
+        ? "https://hotel-1-kdj9.onrender.com/create/customer"
+        : "https://hotel-1-kdj9.onrender.com/create/admin";
 
     const payload =
       active === "customer"

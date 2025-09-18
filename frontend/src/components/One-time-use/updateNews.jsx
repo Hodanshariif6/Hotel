@@ -15,7 +15,7 @@ function UpdateNews() {
   // ✅ Soo qaado xogta hal news ah
   const handleReadSingle = () => {
     axios
-      .get(`https://hotel-u7t5.onrender.com/readSingle/New/${params.id}`)
+      .get(`https://hotel-1-kdj9.onrender.com/readSingle/New/${params.id}`)
       .then((res) => {
         setName(res.data[0].name);
         setDescription(res.data[0].desc);
@@ -37,7 +37,7 @@ function UpdateNews() {
     formData.append("img", img);
 
     axios
-      .put(`https://hotel-u7t5.onrender.com/update/New/${params.id}`, formData)
+      .put(`https://hotel-1-kdj9.onrender.com/update/New/${params.id}`, formData)
       .then(() => {
         toast.success("News updated successfully! 🎉");
         setTimeout(() => {
