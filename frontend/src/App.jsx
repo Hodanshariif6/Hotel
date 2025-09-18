@@ -17,7 +17,7 @@ import  About  from "./pages/About"
 import  Contact  from "./pages/Contact"
 import Customer from "./pages/customer"
 import Report from "./pages/Report"
-import Setting  from "./pages/Setting"
+// import Setting  from "./pages/Setting"
 
 // Layout leh Header (Home, Product)
 function MainLayout({ children }) {
@@ -112,7 +112,7 @@ function App() {
         }
       />
 
-                <Route
+                {/* <Route
         path="/Setting"
         element={
           <ProtectedRouter>
@@ -121,7 +121,7 @@ function App() {
           </DashboardLayout>
           </ProtectedRouter>
         }
-      />
+      /> */}
 
       
       
