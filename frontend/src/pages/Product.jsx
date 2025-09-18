@@ -8,7 +8,7 @@ function Product() {
 
 
     const handleReadData = () => {
-        axios.post("https://hotel-1-kdj9.onrender.com/read/product").then((res) => {
+        axios.get("https://hotel-1-kdj9.onrender.com/read/product").then((res) => {
             setData(res.data)
         })
     }
