@@ -31,7 +31,7 @@ function Dashboard() {
     { name: "Add News", icon: <FiFileText />, path: "/news" },
     { name: "Customer", icon: <FiUsers />, path: "/customer" },
     { name: "Reports", icon: <FiBarChart2 />, path: "/rep" },
-    // { name: "Setting", icon: <FiSettings />, path: "/setting" },
+    { name: "Setting", icon: <FiSettings />, path: "/setting" },
   ];
 
   return (

@@ -1,12 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import {
-  FaTrash,
-  FaMinus,
-  FaPlus,
-  FaBed,
-} from "react-icons/fa";
+import { FaTrash, FaMinus, FaPlus, FaBed } from "react-icons/fa";
 
 function Cart() {
   const [bookingData, setBookingData] = useState([]);
@@ -18,27 +13,25 @@ function Cart() {
     family: 200,
   };
 
-  // Fetch Products
+  // Fetch Products (localStorage)
   useEffect(() => {
     const getData = JSON.parse(localStorage.getItem("products")) || [];
     const update = getData.map((item) => ({
       ...item,
-      quantity: 1,
-      maxQuantity: item.quantity,
+      quantity: item.quantity || 1,
+      maxQuantity: item.quantity || 5,
       roomType: item.roomType || "single",
-      checkIn: "",
-      checkOut: "",
-      nights: 0,
+      checkIn: item.checkIn || "",
+      checkOut: item.checkOut || "",
+      nights: item.nights || 0,
     }));
     setBookingData(update);
   }, []);
 
-  // Fetch Profile (Xasuusin) + auto update when saved
+  // Fetch Profile (Reminder)
   useEffect(() => {
     const savedProfile = JSON.parse(localStorage.getItem("profile"));
-    if (savedProfile) {
-      setProfile(savedProfile);
-    }
+    if (savedProfile) setProfile(savedProfile);
 
     const handleProfileUpdate = () => {
       const updatedProfile = JSON.parse(localStorage.getItem("profile"));
@@ -46,10 +39,7 @@ function Cart() {
     };
 
     window.addEventListener("profileUpdated", handleProfileUpdate);
-
-    return () => {
-      window.removeEventListener("profileUpdated", handleProfileUpdate);
-    };
+    return () => window.removeEventListener("profileUpdated", handleProfileUpdate);
   }, []);
 
   // Delete Profile
@@ -60,10 +50,15 @@ function Cart() {
     }
   };
 
+  // Get customer from localStorage
   const getCustomer = localStorage.getItem("customer");
   let customerOrder = "";
   if (getCustomer) {
-    customerOrder = JSON.parse(getCustomer).data.customer.name;
+    try {
+      customerOrder = JSON.parse(getCustomer).data.customer.name;
+    } catch (err) {
+      console.log("Customer parse error:", err);
+    }
   }
 
   // Handle Date Change
@@ -83,14 +78,13 @@ function Cart() {
             const end = new Date(checkOut);
 
             if (end <= start) {
-              alert("Check-out date must be after check-in date.");
+              alert("❌ Check-out must be after check-in");
               checkOut = "";
             } else {
               const differenceInTime = end.getTime() - start.getTime();
               nights = differenceInTime / (1000 * 3600 * 24);
-
               if (nights > 90) {
-                alert("Booking cannot exceed 90 nights.");
+                alert("❌ Booking cannot exceed 90 nights.");
                 checkOut = "";
                 nights = 0;
               }
@@ -105,7 +99,7 @@ function Cart() {
   };
 
   // Handle Booking
-  const handleBooking = (room) => {
+  const handleBooking = async (room) => {
     if (!customerOrder) {
       alert("Please login first!");
       return;
@@ -116,31 +110,36 @@ function Cart() {
       return;
     }
 
-    axios
-      .post("https://hotel-1-kdj9.onrender.com/create/order", {
-        customer: customerOrder,
-        checkIn: room.checkIn,
-        checkOut: room.checkOut,
-        nights: room.nights,
-        products: [
-          {
-            productId: room._id,
-            quantity: room.quantity,
-            roomType: room.roomType,
-          },
-        ],
-      })
-      .then((res) => {
-        if (res.data.error) {
-          alert(res.data.error);
-        } else {
-          alert(`Booking successful for ${room.name}!`);
-          const updated = bookingData.filter((item) => item._id !== room._id);
-          localStorage.setItem("products", JSON.stringify(updated));
-          setBookingData(updated);
+    try {
+      const res = await axios.post(
+        "https://hotel-1-kdj9.onrender.com/create/order",
+        {
+          customer: customerOrder,
+          checkIn: room.checkIn,
+          checkOut: room.checkOut,
+          nights: room.nights,
+          products: [
+            {
+              productId: room._id,
+              quantity: room.quantity,
+              roomType: room.roomType,
+            },
+          ],
         }
-      })
-      .catch((error) => console.log(error));
+      );
+
+      if (res.data.error) {
+        alert(res.data.error);
+      } else {
+        alert(`✅ Booking successful for ${room.name}`);
+        const updated = bookingData.filter((item) => item._id !== room._id);
+        localStorage.setItem("products", JSON.stringify(updated));
+        setBookingData(updated);
+      }
+    } catch (err) {
+      console.error("Booking error:", err);
+      alert("❌ Server error while booking.");
+    }
   };
 
   // Delete Room
@@ -182,15 +181,13 @@ function Cart() {
       {/* Profile Section */}
       {profile && (
         <div className="bg-purple-50 p-4 rounded-lg mb-6 relative">
-          <h3 className="text-lg font-bold text-purple-700">Xasuusin</h3>
+          <h3 className="text-lg font-bold text-purple-700">Reminder</h3>
           <p className="text-gray-800 font-semibold">
             <strong>Name:</strong> {profile.name}
           </p>
           <p className="text-gray-600">
             <strong>Room:</strong> {profile.desc}
           </p>
-
-          {/* Delete Icon */}
           <button
             onClick={handleDeleteProfile}
             className="absolute top-2 right-2 bg-purple-300 hover:bg-purple-400 text-red-500 hover:text-red-700"
@@ -247,7 +244,6 @@ function Cart() {
                           </h3>
                           <p className="text-xs text-purple-600">Hotel Room</p>
 
-                          {/* Check-in / Check-out + Delete */}
                           <div className="flex gap-2 mt-2">
                             <button
                               onClick={() => handleDelete(room._id)}
@@ -259,11 +255,7 @@ function Cart() {
                               type="date"
                               value={room.checkIn}
                               onChange={(e) =>
-                                handleDateChange(
-                                  room._id,
-                                  "checkIn",
-                                  e.target.value
-                                )
+                                handleDateChange(room._id, "checkIn", e.target.value)
                               }
                               className="border p-1 rounded text-xs"
                             />
@@ -271,11 +263,7 @@ function Cart() {
                               type="date"
                               value={room.checkOut}
                               onChange={(e) =>
-                                handleDateChange(
-                                  room._id,
-                                  "checkOut",
-                                  e.target.value
-                                )
+                                handleDateChange(room._id, "checkOut", e.target.value)
                               }
                               className="border p-1 rounded text-xs"
                             />
@@ -291,9 +279,7 @@ function Cart() {
                           >
                             <FaMinus />
                           </button>
-                          <span className="px-2 font-medium">
-                            {room.quantity}
-                          </span>
+                          <span className="px-2 font-medium">{room.quantity}</span>
                           <button
                             onClick={() => handleIncrement(room._id)}
                             className="px-2 py-1 border rounded bg-purple-600 text-white hover:bg-purple-700"
