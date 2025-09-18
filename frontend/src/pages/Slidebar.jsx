@@ -1,14 +1,6 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import {
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  Tooltip,
-  ResponsiveContainer,
-  CartesianGrid,
-} from "recharts";
+import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from "recharts";
 
 function Slidebar() {
   const [totalIncome, setTotalIncome] = useState(0);
@@ -16,13 +8,13 @@ function Slidebar() {
 
   const handleTopCustomers = () => {
     axios.get("https://hotel-1-kdj9.onrender.com/getTopCustomer/order").then((res) => {
-      setTopCustomers(res.data);
+      setTopCustomers(res.data || []);
     });
   };
 
   const handleGetIncome = () => {
     axios.get("https://hotel-1-kdj9.onrender.com/getIncome/order").then((res) => {
-      setTotalIncome(res.data[0].totalIncome);
+      setTotalIncome(res.data?.[0]?.totalIncome || 0);
     });
   };
 
@@ -31,23 +23,16 @@ function Slidebar() {
     handleTopCustomers();
   }, []);
 
-  // ✅ Total orders oo laga helayo topcustomers
-  const totalOrders = topcustomers.reduce(
-    (sum, customer) => sum + customer.totalOrders,
-    0
-  );
+  const totalOrders = topcustomers.reduce((sum, c) => sum + (c.totalOrders || 0), 0);
 
   return (
     <div className="p-6 space-y-6">
       {/* Cards Section */}
       <div className="flex gap-6">
-        {/* Total Income Card */}
         <div className="shadow-lg rounded-2xl p-6 w-60 bg-gradient-to-r from-pink-500 to-purple-700">
           <h2 className="text-lg font-semibold text-white">Total Income</h2>
           <h3 className="text-3xl font-bold text-white">${totalIncome}</h3>
         </div>
-
-        {/* Total Orders Card */}
         <div className="shadow-lg rounded-2xl p-6 w-60 bg-gradient-to-r from-pink-500 to-purple-700">
           <h2 className="text-lg font-semibold text-white">Total Booking</h2>
           <h3 className="text-3xl font-bold text-white">{totalOrders}</h3>
@@ -66,18 +51,11 @@ function Slidebar() {
             </tr>
           </thead>
           <tbody>
-            {topcustomers.map((items, index) => (
-              <tr
-                key={index}
-                className="hover:bg-black/20 transition duration-200"
-              >
+            {topcustomers.map((items) => (
+              <tr key={items.customer} className="hover:bg-black/20 transition duration-200">
                 <td className="border px-4 py-2">{items.customer}</td>
-                <td className="border px-4 py-2 text-center">
-                  {items.totalOrders}
-                </td>
-                <td className="border px-4 py-2 text-right">
-                  ${items.totalSpent}
-                </td>
+                <td className="border px-4 py-2 text-center">{items.totalOrders}</td>
+                <td className="border px-4 py-2 text-right">${items.totalSpent}</td>
               </tr>
             ))}
           </tbody>
@@ -86,14 +64,9 @@ function Slidebar() {
 
       {/* Chart Section */}
       <div className="shadow-lg rounded-2xl p-6 bg-white">
-        <h2 className="text-lg font-semibold text-gray-700 mb-4">
-          Top Customers Chart
-        </h2>
+        <h2 className="text-lg font-semibold text-gray-700 mb-4">Top Customers Chart</h2>
         <ResponsiveContainer width="100%" height={300}>
-          <BarChart
-            data={topcustomers}
-            margin={{ top: 10, right: 20, left: 0, bottom: 10 }}
-          >
+          <BarChart data={topcustomers} margin={{ top: 10, right: 20, left: 0, bottom: 10 }}>
             <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
             <XAxis dataKey="customer" stroke="#6b7280" />
             <YAxis stroke="#6b7280" />
@@ -105,5 +78,4 @@ function Slidebar() {
     </div>
   );
 }
-
 export default Slidebar;
