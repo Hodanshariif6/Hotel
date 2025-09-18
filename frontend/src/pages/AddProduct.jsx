@@ -22,26 +22,20 @@ function AddProduct() {
     formData.append("name", name);
     formData.append("quantity", quantity);
     formData.append("price", price);
-    formData.append("desc", description); // hubi in backend uu "desc" filayo
+    formData.append("desc", description);
     formData.append("category", category);
     formData.append("detail", detail);
-    formData.append("prImage", img); // ⚠️ hubi magaca backend file field-ka uu filayo
+    formData.append("img", img); // must match multer field name
 
     try {
-      await axios.post(
-        "https://hotel-1-kdj9.onrender.com/create/product",
-        formData,
-        {
-          headers: { "Content-Type": "multipart/form-data" },
-        }
-      );
-      toast.success("Room add success 🚀");
-      setTimeout(() => {
-        navigate("/product");
-      }, 2000);
-    } catch (error) {
-      console.error("Error response:", error.response?.data || error.message);
-      toast.error("Error adding product ❌");
+      await axios.post("https://hotel-1-kdj9.onrender.com/create/product", formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+      toast.success("Room added successfully 🚀");
+      setTimeout(() => navigate("/product"), 2000);
+    } catch (err) {
+      console.error("❌ Upload Error:", err.response?.data || err.message);
+      toast.error("Upload failed ❌");
     }
   };
 
@@ -49,80 +43,19 @@ function AddProduct() {
     <div className="max-w-md mx-auto mt-10 p-6 bg-white rounded-xl shadow-md space-y-4">
       <h2 className="text-2xl font-semibold text-gray-800">Register Product</h2>
 
-      <div>
-        <label className="block text-gray-700 font-medium mb-1">
-          Product Name
-        </label>
-        <input
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          type="text"
-          className="w-full border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
-        />
-      </div>
+      <input value={name} onChange={(e) => setName(e.target.value)} type="text" placeholder="Name" className="w-full border p-2 mb-2" />
+      <input value={quantity} onChange={(e) => setQuantity(e.target.value)} type="number" placeholder="Quantity" className="w-full border p-2 mb-2" />
+      <input value={price} onChange={(e) => setPrice(e.target.value)} type="number" placeholder="Price" className="w-full border p-2 mb-2" />
+      <input value={description} onChange={(e) => setDescription(e.target.value)} type="text" placeholder="Description" className="w-full border p-2 mb-2" />
+      <input value={category} onChange={(e) => setCategory(e.target.value)} type="text" placeholder="Category" className="w-full border p-2 mb-2" />
+      <textarea value={detail} onChange={(e) => setDetail(e.target.value)} placeholder="Detail" className="w-full border p-2 mb-2"></textarea>
 
-      <div>
-        <label className="block text-gray-700 font-medium mb-1">Quantity</label>
-        <input
-          value={quantity}
-          onChange={(e) => setQuantity(e.target.value)}
-          type="number"
-          className="w-full border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
-        />
-      </div>
+      <input onChange={(e) => setImage(e.target.files[0])} type="file" className="w-full mb-2" />
 
-      <div>
-        <label className="block text-gray-700 font-medium mb-1">Price</label>
-        <input
-          value={price}
-          onChange={(e) => setPrice(e.target.value)}
-          type="number"
-          className="w-full border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
-        />
-      </div>
+      <button onClick={handleCreate} className="w-full bg-purple-500 text-white p-2 rounded">
+        Add Room
+      </button>
 
-      <div>
-        <label className="block text-gray-700 font-medium mb-1">
-          Description
-        </label>
-        <input
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-          type="text"
-          className="w-full border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
-        />
-      </div>
-
-      <div>
-        <label className="block text-gray-700 font-medium mb-1">
-          Detail Room
-        </label>
-        <textarea
-          value={detail}
-          onChange={(e) => setDetail(e.target.value)}
-          className="w-full border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
-          rows={4}
-          placeholder="Enter detailed description..."
-        ></textarea>
-      </div>
-
-      <div>
-        <label className="block text-gray-700 font-medium mb-1">Image</label>
-        <input
-          onChange={(e) => setImage(e.target.files[0])}
-          type="file"
-          className="w-full text-gray-700"
-        />
-      </div>
-
-      <div>
-        <button
-          onClick={handleCreate}
-          className="w-full bg-purple-500 hover:bg-purple-600 text-white font-semibold py-2 px-4 rounded-lg transition duration-200"
-        >
-          Add Room
-        </button>
-      </div>
       <ToastContainer position="top-right" autoClose={2000} />
     </div>
   );
