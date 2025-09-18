@@ -99,7 +99,7 @@ function Header() {
 
           <Link to="/carts" onClick={() => setMenuOpen(false)}>
             <button className="px-4 py-2 bg-[#5facc0] text-white rounded-md flex items-center gap-2 w-full">
-              <i className="fa-solid fa-cart-shopping"></i> Cart
+           <i className="fa-solid fa-calendar-check"></i>  Booking
             </button>
           </Link>
         </div>
