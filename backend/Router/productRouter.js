@@ -6,7 +6,7 @@ const uploadImage = require("../middleware/uploadImage")
 router.post("/create/product", uploadImage.single("img"), productController.createProduct)
 
 // get
-router.post("/read/product", productController.readProduct)
+router.get("/read/product", productController.readProduct)
 
 // readsingledata
 router.get("/readSingle/product/:id", productController.readSingleProduct)
