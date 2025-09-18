@@ -10,7 +10,7 @@ function Login() {
   const [active, setActive] = useState("customer");
   const navigate = useNavigate();
 
-  function handleInsert(e) {
+  async function handleInsert(e) {
     e.preventDefault();
 
     const url =
@@ -19,27 +19,31 @@ function Login() {
         : "https://hotel-u7t5.onrender.com/login/admin";
 
     const payload = { email, password };
+    console.log("➡️ Sending to:", url, "Payload:", payload);
 
-    axios
-      .post(url, payload)
-      .then((res) => {
-        toast.success(`${active} login successfully`);
-
-        // ✅ store only data, not full response
-        localStorage.setItem(
-          active === "customer" ? "customer" : "admin",
-          JSON.stringify(res.data)
-        );
-
-        setTimeout(
-          () => navigate(active === "customer" ? "/" : "/dashboard"),
-          1500
-        );
-      })
-      .catch((error) => {
-        console.error("Login error:", error.response?.data || error.message);
-        toast.error(error.response?.data?.message || "Email ama password waa khalad");
+    try {
+      const res = await axios.post(url, payload, {
+        headers: { "Content-Type": "application/json" },
       });
+
+      console.log("✅ Response:", res.data);
+
+      toast.success(`${active} login successfully`);
+      localStorage.setItem(
+        active === "customer" ? "customer" : "admin",
+        JSON.stringify(res.data) // save only res.data
+      );
+
+      setTimeout(() => navigate(active === "customer" ? "/" : "/dashboard"), 1500);
+    } catch (error) {
+      console.error("❌ Login error:", error.response?.data || error.message);
+
+      toast.error(
+        error.response?.data?.message ||
+          error.response?.data?.error ||
+          "Email ama password waa khalad"
+      );
+    }
   }
 
   return (
@@ -75,7 +79,7 @@ function Login() {
         </h2>
 
         {/* Form */}
-        <form onSubmit={handleInsert} className="grid grid-cols-1 space-y-4">
+        <form onSubmit={handleInsert} className="grid grid-cols-1 gap-4">
           <div>
             <label className="block text-sm font-semibold text-gray-700 mb-2">
               Email Address
@@ -87,7 +91,6 @@ function Login() {
               placeholder="Enter your email"
               className="w-full rounded-xl border border-gray-300 px-4 py-3 text-gray-800 placeholder-gray-400 shadow-sm 
                          focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition duration-300"
-              required
             />
           </div>
 
@@ -102,7 +105,6 @@ function Login() {
               placeholder="Enter your password"
               className="w-full rounded-xl border border-gray-300 px-4 py-3 text-gray-800 placeholder-gray-400 shadow-sm 
                          focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition duration-300"
-              required
             />
           </div>
 
@@ -115,6 +117,7 @@ function Login() {
           </button>
         </form>
       </div>
+
       <ToastContainer position="top-right" autoClose={3000} />
     </div>
   );
