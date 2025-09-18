@@ -1,111 +1,128 @@
-import axios from "axios"
-import { useState } from "react"
-import { useNavigate } from "react-router-dom"
-import { toast, ToastContainer } from "react-toastify"
-import "react-toastify/dist/ReactToastify.css"
-
+import axios from "axios";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function Register() {
-    const[customerName, setCustomer] = useState("")
-    const[email, setEmail] = useState("")
-    const[phone, setPhone] = useState("")
-    const[password, setPassword]= useState("")
+  const [customerName, setCustomer] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+  const [password, setPassword] = useState("");
+  const [active, setActive] = useState("customer");
+  const navigate = useNavigate();
 
-    const[active, setActive] = useState("customer")
+  function handleInsert(e) {
+    e.preventDefault();
 
-    const navigate = useNavigate()
+    const url =
+      active === "customer"
+        ? "https://hotel-u7t5.onrender.com/create/customer"
+        : "https://hotel-u7t5.onrender.com/create/admin";
 
-    function handleInsert(e) {
-        e.preventDefault()
-        const url = active === "customer" ? "https://hotel-u7t5.onrender.com/create/customer" : "https://hotel-u7t5.onrender.com/create/admin"
-        const payload = active === "customer" ? {name: customerName, phone: phone, email: email, password: password} : {name: customerName, email: email, password: password}
-        axios.post(url,payload).then((res) => {
-          toast.success(`${active} Login succesfully`)
-            setTimeout(() => navigate("/login"), 1500)
-        }).catch((error) => {
-          if(error){
-            toast.error("invalid email or password")
-          }
-        })
-      }
-            
+    const payload =
+      active === "customer"
+        ? { name: customerName, phone, email, password }
+        : { name: customerName, email, password };
 
+    axios
+      .post(url, payload)
+      .then(() => {
+        toast.success(`${active} registered successfully`);
+        setTimeout(() => navigate("/login"), 1500);
+      })
+      .catch((error) => {
+        console.error("Register error:", error.response?.data || error.message);
+        toast.error(error.response?.data?.message || "Failed to register");
+      });
+  }
 
   return (
     <div className="min-h-screen grid place-items-center bg-gray-50">
       <div className="w-full max-w-md bg-white rounded-2xl shadow p-6">
-        <div className="flex justify-center gap-8">
-          <button onClick={()=> setActive("customer")} className= {` px-12 py-3 rounded-2xl ${active === "customer" ? "bg-purple-500 text-white" : "border-2 border-black text-black"}`}>Customer</button>
-          <button onClick={()=> setActive("admin")} className= {` px-12 py-3 rounded-2xl ${active === "admin" ? "bg-purple-500 text-white" : "border-2 border-black text-black"}`}>Admin</button>
+        <div className="flex justify-center gap-8 mb-4">
+          <button
+            onClick={() => setActive("customer")}
+            className={`px-12 py-3 rounded-2xl ${
+              active === "customer"
+                ? "bg-purple-500 text-white"
+                : "border-2 border-black text-black"
+            }`}
+          >
+            Customer
+          </button>
+          <button
+            onClick={() => setActive("admin")}
+            className={`px-12 py-3 rounded-2xl ${
+              active === "admin"
+                ? "bg-purple-500 text-white"
+                : "border-2 border-black text-black"
+            }`}
+          >
+            Admin
+          </button>
         </div>
-        <h2 className="text-2xl font-semibold tracking-tight mb-1">Register</h2>
 
-        <form className="grid grid-cols-1">
+        <h2 className="text-2xl font-semibold tracking-tight mb-4">Register</h2>
+
+        <form onSubmit={handleInsert} className="grid grid-cols-1 space-y-4">
           <div>
-            <label className="block text-sm font-medium mb-1" htmlFor="name">
-             {active === "customer" ? "Customer Name" : "Admin Name"}
+            <label className="block text-sm font-medium mb-1">
+              {active === "customer" ? "Customer Name" : "Admin Name"}
             </label>
-            <input value={customerName} onChange={(e) => setCustomer(e.target.value)}
-              id="name"
-              name="name"
+            <input
+              value={customerName}
+              onChange={(e) => setCustomer(e.target.value)}
               className="w-full rounded-xl text-black border border-gray-300 px-3 py-2 outline-none focus:ring-2 focus:ring-gray-800"
-             
+              required
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium mb-1" htmlFor="email">
-              Email
-            </label>
-            <input value={email} onChange={(e) => setEmail(e.target.value)}
-              
-              id="email"
+            <label className="block text-sm font-medium mb-1">Email</label>
+            <input
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               type="email"
-              name="email"
               className="w-full rounded-xl border text-black border-gray-300 px-3 py-2 outline-none focus:ring-2 focus:ring-gray-800"
-              
+              required
             />
           </div>
 
-          <div style={{ display: active !== "customer" ? "none" : "" }}>
-            <label className="block text-sm font-medium mb-1" htmlFor="phone">
-              Phone
-            </label>
-            <input value={phone} onChange={(e) => setPhone(e.target.value)}
-              
-              id="phone"
-              name="phone"
-              className="w-full rounded-xl border text-black border-gray-300 px-3 py-2 outline-none focus:ring-2 focus:ring-gray-800"
-              
-            />
-          </div>
+          {active === "customer" && (
+            <div>
+              <label className="block text-sm font-medium mb-1">Phone</label>
+              <input
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+                className="w-full rounded-xl border text-black border-gray-300 px-3 py-2 outline-none focus:ring-2 focus:ring-gray-800"
+                required
+              />
+            </div>
+          )}
 
           <div>
-            <label className="block text-sm font-medium mb-1" htmlFor="password">
-              Password
-            </label>
-            <input value={password} onChange={(e) => setPassword(e.target.value)}
-              id="password"
+            <label className="block text-sm font-medium mb-1">Password</label>
+            <input
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
               type="password"
-              name="password"
               className="w-full rounded-xl border text-black border-gray-300 px-3 py-2 outline-none focus:ring-2 focus:ring-gray-800"
-             
+              required
             />
           </div>
 
-          <button onClick={(e) => handleInsert(e)}
+          <button
             type="submit"
             className="w-full rounded-xl bg-gray-900 px-4 py-2 text-white font-medium hover:bg-black"
           >
-           {active === "customer" ? "Register Customer" : "Register Admin"}
+            {active === "customer" ? "Register Customer" : "Register Admin"}
           </button>
         </form>
-
-        
       </div>
-      <ToastContainer  position="top-right" autoClose={3000} />
+      <ToastContainer position="top-right" autoClose={3000} />
     </div>
-  )
+  );
 }
 
-export default Register
+export default Register;

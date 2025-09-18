@@ -12,6 +12,7 @@ function Login() {
 
   function handleInsert(e) {
     e.preventDefault();
+
     const url =
       active === "customer"
         ? "https://hotel-u7t5.onrender.com/login/customer"
@@ -23,14 +24,21 @@ function Login() {
       .post(url, payload)
       .then((res) => {
         toast.success(`${active} login successfully`);
+
+        // ✅ store only data, not full response
         localStorage.setItem(
           active === "customer" ? "customer" : "admin",
-          JSON.stringify(res)
+          JSON.stringify(res.data)
         );
-        setTimeout(() => navigate(active === "customer" ? "/" : "/dashboard"), 1500);
+
+        setTimeout(
+          () => navigate(active === "customer" ? "/" : "/dashboard"),
+          1500
+        );
       })
-      .catch(() => {
-        toast.error("Email ama password waa khalad");
+      .catch((error) => {
+        console.error("Login error:", error.response?.data || error.message);
+        toast.error(error.response?.data?.message || "Email ama password waa khalad");
       });
   }
 
@@ -67,45 +75,37 @@ function Login() {
         </h2>
 
         {/* Form */}
-        <form onSubmit={handleInsert} className="grid grid-cols-1">
-          {/* Email */}
+        <form onSubmit={handleInsert} className="grid grid-cols-1 space-y-4">
           <div>
-            <label
-              className="block text-sm font-semibold text-gray-700 mb-2"
-              htmlFor="email"
-            >
+            <label className="block text-sm font-semibold text-gray-700 mb-2">
               Email Address
             </label>
             <input
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              id="email"
               type="email"
               placeholder="Enter your email"
               className="w-full rounded-xl border border-gray-300 px-4 py-3 text-gray-800 placeholder-gray-400 shadow-sm 
                          focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition duration-300"
+              required
             />
           </div>
 
-          {/* Password */}
           <div>
-            <label
-              className="block text-sm font-semibold text-gray-700 mb-2"
-              htmlFor="password"
-            >
+            <label className="block text-sm font-semibold text-gray-700 mb-2">
               Password
             </label>
             <input
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              id="password"
               type="password"
               placeholder="Enter your password"
               className="w-full rounded-xl border border-gray-300 px-4 py-3 text-gray-800 placeholder-gray-400 shadow-sm 
-                         focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition duration-300"/>
+                         focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition duration-300"
+              required
+            />
           </div>
 
-          {/* Login Button */}
           <button
             type="submit"
             className="w-full rounded-xl bg-blue-600 px-4 py-3 text-white font-semibold 
@@ -114,19 +114,8 @@ function Login() {
             {active === "customer" ? "Login as Customer" : "Login as Admin"}
           </button>
         </form>
-
-        {/* Extra links */}
-        <div className="mt-6 text-center">
-          <p className="text-sm text-gray-600">
-            Don't have an account?{" "}
-            <span className="text-blue-600 cursor-pointer hover:underline">
-              Sign Up
-            </span>
-          </p>
-        </div>
       </div>
-
-      {/* Toastify Container */}
+      <ToastContainer position="top-right" autoClose={3000} />
     </div>
   );
 }
