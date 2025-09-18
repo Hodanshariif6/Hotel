@@ -21,7 +21,7 @@ app.use(customerRouter)
 app.use(orderROuter)
 app.use(adminROuter)
 
-mongoose.connect(process.env.db_url)
+mongoose.connect(process.env.MONGO_URIl)
     .then(() => console.log("MongoDB connected"))
     .catch(err => console.error(err))
 
