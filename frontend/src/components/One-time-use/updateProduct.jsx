@@ -18,7 +18,7 @@ function UpdateProduct() {
     const navigate = useNavigate()
 
     const handleReadSingle = () => {
-        axios.get(`http://localhost:5000/readSingle/product/${params.id}`)
+        axios.get(`https://hotel-u7t5.onrender.com/readSingle/product/${params.id}`)
             .then((res) => {
                 setName(res.data[0].name)
                 setQuantity(res.data[0].quantity)
@@ -43,7 +43,7 @@ function UpdateProduct() {
         formData.append("detail", detail);
 
 
-        axios.put(`http://localhost:5000/update/product/${params.id}`, formData)
+        axios.put(`https://hotel-u7t5.onrender.com/update/product/${params.id}`, formData)
             .then(() => {
                 toast.success("Room updated successfully! 🎉")
                 setTimeout(() => {

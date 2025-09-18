@@ -13,7 +13,7 @@ function Features() {
   // Fetch Products by Category
   const handleReadData = () => {
     axios
-      .post("http://localhost:5000/read/product", { category })
+      .post("https://hotel-u7t5.onrender.com/read/product", { category })
       .then((res) => {
         setData(res.data);
       })
@@ -87,7 +87,7 @@ const handleCloseModal = () => {
               {/* Image */}
               <div className="relative">
                 <img
-                  src={`http://localhost:5000/allImages/${items.prImage}`}
+                  src={`https://hotel-u7t5.onrender.com/allImages/${items.prImage}`}
                   alt={items.name}
                   className="w-full h-40 object-cover hover:scale-105 transition-transform duration-300"
                 />
@@ -158,7 +158,7 @@ const handleCloseModal = () => {
         </h2>
 
         <img
-          src={`http://localhost:5000/allImages/${selectedProduct.prImage}`}
+          src={`https://hotel-u7t5.onrender.com/allImages/${selectedProduct.prImage}`}
           alt={selectedProduct.name}
           className="w-full h-40 object-cover rounded mb-4"
         />

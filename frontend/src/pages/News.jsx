@@ -6,7 +6,7 @@ function News() {
   const [data, setData] = useState([]);
 
   const handleReadData = () => {
-    axios.post("http://localhost:5000/read/New").then((res) => {
+    axios.post("https://hotel-u7t5.onrender.com/read/New").then((res) => {
       setData(res.data);
     });
   };

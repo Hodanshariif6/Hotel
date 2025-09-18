@@ -37,11 +37,11 @@ function Report() {
   const fetchData = async () => {
     try {
       // ✅ Halkan waxaad soo qaadaysaa xogta rooms
-      const resRooms = await axios.get("http://localhost:5000/read/product");
+      const resRooms = await axios.get("https://hotel-u7t5.onrender.com/read/product");
       setRoomData(resRooms.data);
 
       // ✅ Halkan waxaad soo qaadaysaa xogta news
-      const resNews = await axios.get("http://localhost:5000/read/New");
+      const resNews = await axios.get("https://hotel-u7t5.onrender.com/read/New");
       setNewsData(resNews.data);
     } catch (err) {
       console.error("Error fetching:", err);

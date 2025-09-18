@@ -117,7 +117,7 @@ function Cart() {
     }
 
     axios
-      .post("http://localhost:5000/create/order", {
+      .post("https://hotel-u7t5.onrender.com/create/order", {
         customer: customerOrder,
         checkIn: room.checkIn,
         checkOut: room.checkOut,
@@ -237,7 +237,7 @@ function Cart() {
                     >
                       <td className="py-4 flex items-center gap-4">
                         <img
-                          src={`http://localhost:5000/allImages/${room.prImage}`}
+                          src={`https://hotel-u7t5.onrender.com/allImages/${room.prImage}`}
                           alt={room.name}
                           className="w-20 h-16 object-cover rounded-lg shadow-sm"
                         />

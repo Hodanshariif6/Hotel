@@ -14,8 +14,8 @@ function Login() {
     e.preventDefault();
     const url =
       active === "customer"
-        ? "http://localhost:5000/login/customer"
-        : "http://localhost:5000/login/admin";
+        ? "https://hotel-u7t5.onrender.com/login/customer"
+        : "https://hotel-u7t5.onrender.com/login/admin";
 
     const payload = { email, password };
 

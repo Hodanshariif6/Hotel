@@ -8,7 +8,7 @@ function Product() {
 
 
     const handleReadData = () => {
-        axios.post("http://localhost:5000/read/product").then((res) => {
+        axios.post("https://hotel-u7t5.onrender.com/read/product").then((res) => {
             setData(res.data)
         })
     }
@@ -18,7 +18,7 @@ function Product() {
     },[])
 
     const handleDelete = (id) => [
-        axios.delete(`http://localhost:5000/delete/product/${id}`).then(() => {
+        axios.delete(`https://hotel-u7t5.onrender.com/delete/product/${id}`).then(() => {
             alert("succes delete")
             handleReadData()
         })
@@ -49,7 +49,7 @@ function Product() {
               <td className="py-3 px-4">{items.prId}</td>
               <td className="py-3 px-4">
                 <img
-                  src={`http://localhost:5000/allImages/${items. prImage}`}
+                  src={`https://hotel-u7t5.onrender.com/allImages/${items. prImage}`}
                   alt="Iphone"
                   className="w-12 h-12 object-cover rounded-md"
                 />

@@ -20,7 +20,7 @@ function AddProduct() {
 
    const handleCreate = (e) => {
     e.preventDefault()
-    axios.post("http://localhost:5000/create/product", formData)
+    axios.post("https://hotel-u7t5.onrender.com/create/product", formData)
     .then(() => {
         toast.success("Room add success 🚀")
         setTimeout(() => {

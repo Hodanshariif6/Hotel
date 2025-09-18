@@ -32,7 +32,7 @@ function About() {
 
   const fetchNews = async () => {
     try {
-      const res = await axios.post("http://localhost:5000/read/New");
+      const res = await axios.post("https://hotel-u7t5.onrender.com/read/New");
       setNews(res.data);
     } catch (error) {
       console.error("Failed to fetch news:", error);
@@ -79,7 +79,7 @@ function About() {
               data-aos-delay={index * 100}
             >
               <img
-                src={`http://localhost:5000/allImages/${item.prImage}`}
+                src={`https://hotel-u7t5.onrender.com/allImages/${item.prImage}`}
                 alt={item.name}
                 className="w-full h-48 object-cover"
               />

@@ -15,13 +15,13 @@ function Slidebar() {
   const [topcustomers, setTopCustomers] = useState([]);
 
   const handleTopCustomers = () => {
-    axios.get("http://localhost:5000/getTopCustomer/order").then((res) => {
+    axios.get("https://hotel-u7t5.onrender.com/getTopCustomer/order").then((res) => {
       setTopCustomers(res.data);
     });
   };
 
   const handleGetIncome = () => {
-    axios.get("http://localhost:5000/getIncome/order").then((res) => {
+    axios.get("https://hotel-u7t5.onrender.com/getIncome/order").then((res) => {
       setTotalIncome(res.data[0].totalIncome);
     });
   };

@@ -17,7 +17,7 @@ function Register() {
 
     function handleInsert(e) {
         e.preventDefault()
-        const url = active === "customer" ? "http://localhost:5000/create/customer" : "http://localhost:5000/create/admin"
+        const url = active === "customer" ? "https://hotel-u7t5.onrender.com/create/customer" : "https://hotel-u7t5.onrender.com/create/admin"
         const payload = active === "customer" ? {name: customerName, phone: phone, email: email, password: password} : {name: customerName, email: email, password: password}
         axios.post(url,payload).then((res) => {
           toast.success(`${active} Login succesfully`)
